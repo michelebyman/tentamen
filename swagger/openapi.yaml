@@ -1,0 +1,203 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: HomneNet
+  description: |
+    An api that implements properties and saves/edit it into mongoDb.
+     
+    
+    The purpose of this API is to let users list thier properties.
+     
+    license:
+    name: MIT
+servers:
+- url: http://localhost:3000
+paths:
+  /listings:
+    get:
+      summary: List properties
+      # operationId: listPosts
+      tags:
+      - properties
+      parameters:
+      - name: propertyId
+        in: query
+        description: filter by property id
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Array of properties
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseProperties"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a Property
+      operationId: createProperty
+      tags:
+      - properties
+      requestBody:
+        description: the property to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Property'
+      responses:
+        '201':
+          description: The created property
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseProperty"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /listings/{propertyId}:
+    get:
+      summary: Get a property
+      operationId: getProperty
+      tags:
+        - properties
+      parameters:
+      - name: propertyId
+        in: path
+        description: property id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The found property
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseProperty"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Replace a property
+      operationId: putProperty
+      tags:
+      - properties
+      parameters:
+      - name: propertyId
+        in: path
+        description: property id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: the property to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Property'
+      responses:
+        '200':
+          description: The replaced property
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseProperty"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a Property
+      operationId: deleteProperty
+      tags:
+        - properties
+      parameters:
+      - name: propertyId
+        in: path
+        description: property id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The deleted property
+          content:
+            application/json:    
+              schema:
+                $ref: "#/components/schemas/ResponseProperty"
+        '204':
+          description: No change (nothing was deleted)
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Property:
+      properties:
+        propertyType:
+          type: string
+        propertyInfo:
+            properties:
+              street:
+               type: string
+              zipCode:
+               type: string
+              city:
+                type: string
+              latitude:
+                type: integer
+              longitude:
+                type: integer
+              priceSwedishKr:
+                type: integer
+              monthlyFeeSwedishKr:
+                type: integer
+              bidding:
+                type: boolean
+        description:
+          type: string
+    ResponseProperty:
+      allOf:
+      - $ref: "#/components/schemas/Property"
+      - properties:
+          id:
+            type: integer
+          _id:
+            type: string
+            format: uuid
+    ResponseProperties:
+      type: array
+      items:
+        $ref: "#/components/schemas/ResponseProperty"
+
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
