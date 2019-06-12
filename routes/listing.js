@@ -1,24 +1,20 @@
-// get = (req, res, next) => {
-//   req.models.Listing.find().then((listings) => {
-//       return res.send(listings);
-//     }).catch((error) => next(error));
-// };
-
-//does not work yet!!!!!!
 get = (req, res, next) => {
   var query;
-  console.log(req.query.city);
+console.log(req.query.city);
 
   if (req.query.city) {
-    query = req.models.Listing.findOne({
-      city: req.query.city
+    query = req.models.Listing.find({
+      'propertyInfo.street': req.query.city
     });
   } else {
     query = req.models.Listing.find();
-  };
+  }
+
   query.exec().then((property) => {
     return res.send(property);
-  }).catch((error) => next(error));
+  }).catch((error) => {
+    next(error);
+  });
 };
 
 post = (req, res, next) => {
