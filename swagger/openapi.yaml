@@ -157,6 +157,11 @@ components:
         propertyType:
           type: string
         propertyInfo:
+        # this is how you do requierd field
+           # required:
+           # - street
+           # - zipCode
+           # - city
             properties:
               street:
                type: string

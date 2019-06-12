@@ -3,7 +3,12 @@ mongoose = require('mongoose');
 const listingSchema = new mongoose.Schema({
     propertyType: String,
         propertyInfo: {
-            street: String,
+            street: {
+                type: String,
+                // this is how you do required fields
+                // require: true
+            },
+
             zipCode: String,
             city: String,
             latitude: Number,
