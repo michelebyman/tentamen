@@ -22,7 +22,7 @@ paths:
       parameters:
       - name: city
         in: query
-        description: filter by property id
+        description: filter by location 
         required: false
         schema:
           type: string
