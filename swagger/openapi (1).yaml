@@ -20,13 +20,12 @@ paths:
       tags:
       - properties
       parameters:
-      - name: propertyId
+      - name: city
         in: query
         description: filter by property id
         required: false
         schema:
-          type: integer
-          format: int32
+          type: string
       responses:
         '200':
           description: Array of properties
